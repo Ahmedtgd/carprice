@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Page</title>
+
+  <!-- Add your stylesheets, scripts, and meta tags here -->
+  <style>
+    body {
+      direction: rtl;
+    }
+    /* Add the rest of your CSS styles here */
+  </style>
+</head>
+<body>
+  <!-- Add your HTML code here -->
+  <P> <h1> <b>       المبلغ              </b> </h1> </P>
+  <!-- Car list and search bar -->
+  <input type="text" class="T2"  id="search" placeholder="السيارة أو المبلغ المتاح">
+
+  <form>
+    <P> <h1> <b>       العملة              </b> </h1> </P>
+    <input type="radio" name="currency" id="egp" value="EGP" />
+    <label for="egp">جنيه مصري</label>    
+    </br>
+    <input type="radio" name="currency" id="usd" value="USD" />
+    <label for="usd">دولار أمريكي</label>   
+  </form>
+  <P> <h1> <b>       السيارات المتاحة        </b> </h1> </P>
+
+  <ul id="list"></ul>
+
+  <!-- jQuery library -->
+  <script src="js/jquery-3.6.0.min.js"></script>
+
+  <script>
+    let cars = [
+      { name: "BMW", price: 30000, currency: "USD" },
+      { name: "Chevrolet", price: 15000, currency: "EGP" },
+      { name: "Dodge", price: 18000, currency: "USD" },
+      { name: "Ford", price: 17000, currency: "EGP" },
+      { name: "Honda", price: 19000, currency: "USD" },
+      { name: "Nissan", price: 22000, currency: "EGP" },
+      { name: "Toyota", price: 23000, currency: "USD" }
+    ];
+
+    // Define a function to toggle the car list based on the search query and currency
+    function toggleCarList() {
+      let query = $("#search").val().trim();
+      let currency = $("input[type='radio'][name='currency']:checked").val();
+
+      if (query === "") {
+        $("#list").hide();
+      } else {
+        let filtered = cars.filter(car => (car.name.toLowerCase().includes(query) || car.price.toString().includes(query)) && car.currency == currency);
+        $("#list").empty();
+        filtered.forEach(car => {
+          // Add img tag with src attribute pointing to the corresponding image location
+          $("#list").append(`<li>${car.name} - ${car.price} <img src="images/${car.name.toLowerCase()}.jpg" alt="${car.name}"></li>`);
+        });
+        $("#list").show();
+      }
+    }
+
+    // Add an event listener to trigger toggleCarList function when the search query is changed
+    $("#search").on("input", toggleCarList);
+
+    // Add event listeners to trigger toggleCarList function when the currency is changed
+    $("input[type='radio'][name='currency']").on("click", toggleCarList);
+  </script>
+
+  <!-- Your CSS code -->
+  <style>
+    #list {
+      display: none;
+    }
+    #list li {
+      cursor: pointer;
+    }
+    #list:not(:empty) {
+      display: block;
+    }
+    #list li img {
+      width: 100px;
+      height: 75px;
+    }
+    ::placeholder {
+      color: blue;
+      padding: 5px;
+      font-weight: 0010;  
+    }
+    .T2 {
+      padding: 5px;
+      border-radius: 10px;
+      font-size: 20px;
+    }
+    .X {
+      border: 2px solid black;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 20px;     
+    }
+    .X {
+      padding: 10px;
+      border-radius: 2px;
+      transition: all 0.25 ease;
+      margin: 10px 0px; 
+      padding: 5px 5px;
+      font-weight: bold;
+    }
+  </style>
+</body>
+</html>
