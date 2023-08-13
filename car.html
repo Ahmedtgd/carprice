@@ -9,69 +9,7 @@
     body {
       direction: rtl;
     }
-    /* Add the rest of your CSS styles here */
-  </style>
-</head>
-<body>
-  <!-- Add your HTML code here -->
-  <P> <h1> <b>       المبلغ              </b> </h1> </P>
-  <!-- Car list and search bar -->
-  <input type="text" class="T2"  id="search" placeholder="السيارة أو المبلغ المتاح">
-
-  <form>
-    <P> <h1> <b>       العملة              </b> </h1> </P>
-    <input type="radio" name="currency" id="egp" value="EGP" />
-    <label for="egp">جنيه مصري</label>    
-    </br>
-    <input type="radio" name="currency" id="usd" value="USD" />
-    <label for="usd">دولار أمريكي</label>   
-  </form>
-  <P> <h1> <b>       السيارات المتاحة        </b> </h1> </P>
-
-  <ul id="list"></ul>
-
-  <!-- jQuery library -->
-  <script src="js/jquery-3.6.0.min.js"></script>
-
-  <script>
-    let cars = [
-      { name: "BMW", price: 30000, currency: "USD" },
-      { name: "Chevrolet", price: 15000, currency: "EGP" },
-      { name: "Dodge", price: 18000, currency: "USD" },
-      { name: "Ford", price: 17000, currency: "EGP" },
-      { name: "Honda", price: 19000, currency: "USD" },
-      { name: "Nissan", price: 22000, currency: "EGP" },
-      { name: "Toyota", price: 23000, currency: "USD" }
-    ];
-
-    // Define a function to toggle the car list based on the search query and currency
-    function toggleCarList() {
-      let query = $("#search").val().trim();
-      let currency = $("input[type='radio'][name='currency']:checked").val();
-
-      if (query === "") {
-        $("#list").hide();
-      } else {
-        let filtered = cars.filter(car => (car.name.toLowerCase().includes(query) || car.price.toString().includes(query)) && car.currency == currency);
-        $("#list").empty();
-        filtered.forEach(car => {
-          // Add img tag with src attribute pointing to the corresponding image location
-          $("#list").append(`<li>${car.name} - ${car.price} <img src="images/${car.name.toLowerCase()}.jpg" alt="${car.name}"></li>`);
-        });
-        $("#list").show();
-      }
-    }
-
-    // Add an event listener to trigger toggleCarList function when the search query is changed
-    $("#search").on("input", toggleCarList);
-
-    // Add event listeners to trigger toggleCarList function when the currency is changed
-    $("input[type='radio'][name='currency']").on("click", toggleCarList);
-  </script>
-
-  <!-- Your CSS code -->
-  <style>
-    #list {
+     #list {
       display: none;
     }
     #list li {
@@ -108,6 +46,66 @@
       padding: 5px 5px;
       font-weight: bold;
     }
+    
   </style>
+</head>
+<body>
+  <!-- Add your HTML code here -->
+  <P> <h1> <b>       المبلغ              </b> </h1> </P>
+  <!-- Car list and search bar -->
+  <input type="text" class="T2" id="searchLess" placeholder=" السعر يبدأ من">
+
+  <input type="text" class="T2" id="searchGreater" placeholder="السعر يصل الى ">
+  
+  <form>
+    <P> <h1> <b>       العملة              </b> </h1> </P>
+    <input type="radio" name="currency" id="egp" value="EGP" />
+    <label for="egp">جنيه مصري</label>    
+    </br>
+    <input type="radio" name="currency" id="usd" value="USD" />
+    <label for="usd">دولار أمريكي</label>   
+  </form>
+  <P> <h1> <b>       السيارات المتاحة        </b> </h1> </P>
+
+  <ul id="list"></ul>
+
+  <!-- jQuery library -->
+  <script src="js/jquery-3.6.0.min.js"></script>
+
+  <script src="js/data.js"></script>
+    <script>
+     // Define a function to toggle the car list based on the search query and currency
+    function toggleCarList() {
+      let queryLess = $("#searchLess").val().trim();
+      let queryGreater = $("#searchGreater").val().trim();
+      let currency = $("input[type='radio'][name='currency']:checked").val();
+
+      if (queryLess === "" && queryGreater === "") {
+        $("#list").hide();
+      } else {
+        let filtered = cars.filter(car => {
+          return (
+            car.currency === currency &&
+            (queryLess === "" || parseFloat(car.price) >= parseFloat(queryLess)) &&
+            (queryGreater === "" || parseFloat(car.price) <= parseFloat(queryGreater))
+          );
+        });
+
+        $("#list").empty();
+        filtered.forEach(car => {
+          $("#list").append(`<li>${car.name} - ${car.price} <img src="images/${car.name.toLowerCase()}.jpg" alt="${car.name}"></li>`);
+        });
+        $("#list").show();
+      }
+    }
+
+    // Add event listeners for both search inputs
+    $("#searchLess").on("input", toggleCarList);
+    $("#searchGreater").on("input", toggleCarList);
+
+    // Add event listeners to trigger toggleCarList function when the currency is changed
+    $("input[type='radio'][name='currency']").on("click", toggleCarList);
+  </script>
+  
 </body>
 </html>
